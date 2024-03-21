@@ -1,25 +1,26 @@
 from __future__ import division
 import numpy as np
 import cvxpy as cvx
-#Abstract Class for Concave fcns
+
+
 class func_concave(object):
-    '''Parent class for all concave functions'''
-        #returns function value
+    """Parent class for all concave functions"""
+    
     def func_value(self,u):
+        """returns function value"""
         raise NotImplementedError()
 
-        #returns gradient or right derivative
     def gradient(self,u):
+        """returns gradient or right derivative"""
         raise NotImplementedError()
 
-        #returns conjugate function value
     def conjugate_value(self,y):
+        """returns conjugate function value"""
         raise NotImplementedError()
 
 
-#Adwords
 class func_adwords(func_concave):
-    '''Adwords :     min(u,1)'''
+    """Adwords :     min(u,1)"""
 
     def func_value(self,u):
         return np.minimum(u,1)
@@ -33,9 +34,9 @@ class func_adwords(func_concave):
     def extra_constraint(self,y):
         return y[-1] == 0
 
-#log(u+1)
+
 class func_log(func_concave):
-    '''log(u+1)'''
+    """log(u+1)"""
 
     def func_value(self,u):
         return np.log(u + 1)
@@ -49,9 +50,9 @@ class func_log(func_concave):
     def extra_constraint(self,y):
         return y[1:]-y[:-1] <= 0
 
-#log(u+1)
+
 class func_inverse(func_concave):
-    '''log(u+1)'''
+    """1 - 1 / (u + 1)"""
 
     def func_value(self,u):
         return 1-1/(u + 1)
@@ -65,8 +66,9 @@ class func_inverse(func_concave):
     def extra_constraint(self,y):
         return y[1:]-y[:-1] <= 0
 
+
 class func_linear_budget(func_concave):
-    '''-pos(u-1),   pos is positive part'''
+    """-pos(u-1),   pos is positive part"""
 
     def __init__(self,l):
         self.l = l
